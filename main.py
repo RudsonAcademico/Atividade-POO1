@@ -81,7 +81,7 @@ termometro.fabricante = "WIKA"
 termometro.modelo = "Industrial"
 termometro.local = "Subsolo"
 termometro.escala = "Grais Celsius"
-print(f"\nO Termostato esta medindo 28° {termometro.escala} ")
+print(f"\nO Termostato esta medindo 28° {termometro.escala}")
 
 class DNA:
     def __init__(self):
