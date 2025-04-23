@@ -4,7 +4,18 @@ import random
 
 class Jogo:
     def __init__(self):
-        pass
+        self.__dificuldade = 2
+
+    
+    @property
+    def dificuldade(self):
+        return self.__dificuldade
+    
+    @dificuldade.setter
+    def dificuldade(self,valor):
+        if valor >= 1 and valor <= 3:
+            self.__dificuldade = valor
+        
 
     def iniciar(self):
         print("O jogo começou!")
@@ -14,77 +25,101 @@ class Jogo:
 
 
 class Inimigo:
-    def __init__(self):
-        self.nome = "Monstrinho"
-        self.vida = 100
+    def __init__(self, nome, vida, forca):
+        self.nome = nome
+        self.vida = vida
+        self.__forca = forca
 
+    
     def definir_vida(self, quantidade):
         self.vida = quantidade
 
+    @property
+    def atacar(self):
+        print(self.__forca)
 
-    def atacar(self, alvo, quantidade):
-        print(f"O inimigo atacou! e lhe causou {quantidade} de dano")
-        alvo.vida-=quantidade
+    
 
 class Pontuacao():
     def __init__(self):
-        self.pontos = 0
+        self.__pontos = 0
+
+    @property
+    def pontos(self):
+        return self.__pontos
+
+    @pontos.setter
+    def pontos(self,valor):
+        if valor >= 0:
+            self.__pontos+=valor
+            self.mostrar_pontos()
+        else:
+            print("Valor invalido")
 
     def zerar_pontos(self):
-        self.pontos = 0
+        self.__pontos = 0
         print("Pontuação zerada!")
     
-    def mostrar_pontos(self):
-        print(f"Pontuação atual: {self.pontos}")
-
-    def adicionar_pontos(self, quantidade):
-        self.pontos+=quantidade
-        self.mostrar_pontos()
 
 class Personagem:
-    def __init__(self):
-        self.vida = 100
-        self.nome = input("Digite o nome do seu personagem: ")
+    def __init__(self, vida, nome):
+        self.__vida = vida
+        self.nome = nome
+        self.__defesa = 50
+
+    @property
+    def defesa(self):
+        return self.__defesa
+
+    @defesa.setter
+    def defesa(self,valor):
+        if valor <= 100 and valor >= 0:
+            self.__defesa = valor
     
     def dizer_nome(self):
         print(f"Meu nome é {self.nome}")
 
     def tomar_dano(self, dano):
-        self.vida-=dano
-        if self.vida <= 0:
+        self.__vida-=dano
+        if self.__vida <= 0:
             print("Game Over!") 
             
 
     def fim_de_jogo(self):
         print("Game Over!")
-        
+    
+    @property
+    def mostrar_vida(self):
+        return self.__vida
     
 
 class Jogador:
-    def __init__(self):
-        self.energia = 100
+    def __init__(self, nome, energia, pontos):
+        self.__energia = energia
+        self.nome = nome
+        self.pontos = pontos
     
-    def recuperar_energia(self, quantidade):
-        self.energia += quantidade
-        if self.energia > 100:
+    def recuperar_energia(self, valor):
+        self.__energia += valor
+        if self.__energia > 100:
             print("você esta com energia maxima")
-            self.energia = 100
+            self.__energia = 100
         else:
-            print(f"Você recuperou {quantidade} pontos de energia")
+            print(f"Você recuperou {valor} pontos de energia")
     
-    def usar_energia(self, quantidade):
-        self.energia -= quantidade
-        if self.energia <= 0:
+    def usar_energia(self, valor):
+        self.__energia -= valor
+        if self.__energia <= 0:
             print("Sem energia suficiente!")
 
-    def atacar(self, alvo, quantidade):
-        print(f"Você atacou! e causou {quantidade} de dano")
-        alvo.vida-=quantidade
+    def atacar(self, alvo, valor):
+        print(f"Você atacou! e causou {valor} de dano")
+        alvo.vida-=valor
         self.usar_energia(10)
 
 class Menu:
-    def __init__(self):
-        pass
+    def __init__(self, titulo):
+        self.titulo = titulo
     
     def iniciar_jogo(self, game):
         game.iniciar()
@@ -109,6 +144,7 @@ mob = Personagem()
 
 bixo = Inimigo()
 
+"""
 while True:
     acao = int(input(f"Menu: digite o valor da ação\n1: Iniciar Jogo\n2: Mostrar Opções\n3: Sair\n"))
     if acao == 2:
@@ -152,4 +188,4 @@ while True:
         break
     else:
         print("Ação invalida")
-    
+"""
