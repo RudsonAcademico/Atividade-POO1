@@ -1,4 +1,4 @@
-class Turma:
+class Turma():
     def __init__(self, *alunos):
         """
         Cria turmas com um numero variavel de alunos mas não permite a listagem de alunos com nomes repetidos 
