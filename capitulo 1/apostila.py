@@ -1,6 +1,7 @@
 import random
 
 #criação de classes
+#fiz continuamente o capitulo 1 e o 2
 
 class Jogo:
     def __init__(self):
