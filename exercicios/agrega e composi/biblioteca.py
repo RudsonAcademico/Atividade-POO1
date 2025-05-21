@@ -17,11 +17,9 @@ class Emprestimo():
         self.membro = membro 
 
 class Categoria():
-    def __init__(self):
-        self.livros_na_categoria = []
-    
-    def adicionar_na_categoria(self, livro):
-        self.livros_na_categoria.append(livro)
+    def __init__(self, nome_da_categoria):
+        self.nome_da_categoria = nome_da_categoria
+
 
 
 class Biblioteca():
@@ -41,3 +39,12 @@ class Biblioteca():
         emprestimo = Emprestimo(livro, membro)
         self.emprestimos.append(emprestimo)
     
+
+carvao = Livro("Espadachim de Carvão", 1)
+membro1 = Membro("Jorge")
+membro1.adicionar_livro(carvao)
+
+biblioteca1 = Biblioteca()
+biblioteca1.adicionar_membro(membro1)
+biblioteca1.adicionar_categoria("Aventura")
+biblioteca1.adicionar_emprestimo(carvao, membro1)
