@@ -6,11 +6,15 @@ class Livro():
 class Membro():
     def __init__(self, nome):
         self.nome = nome
+        self.livros = []
+
+    def adicionar_livro(self, livro):
+        self.livros.append(livro)
 
 class Emprestimo():
-    def __init__(self, livro, data_do_emprestimo):
+    def __init__(self, livro, membro):
         self.livro_emprestado = livro
-        self.data = data_do_emprestimo
+        self.membro = membro 
 
 class Categoria():
     def __init__(self):
@@ -26,15 +30,14 @@ class Biblioteca():
         self.membros = []
         self.emprestimos = []
     
-    def adicionar_membro(self, nome_do_membro):
-        membro = Membro(nome_do_membro)
+    def adicionar_membro(self, membro):
         self.membros.append(membro)
 
     def adicionar_categoria(self, nome_da_categoria):
         categoria = Categoria(nome_da_categoria)
         self.categorias.append(categoria)
 
-    def adicionar_emprestimo(self, livro, data_do_emprestimo):
-        emprestimo = Emprestimo(livro, data_do_emprestimo)
+    def adicionar_emprestimo(self, livro, membro):
+        emprestimo = Emprestimo(livro, membro)
         self.emprestimos.append(emprestimo)
     
