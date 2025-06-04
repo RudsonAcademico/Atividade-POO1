@@ -37,7 +37,7 @@ class Inimigo:
 
     @property
     def atacar(self):
-        print(self.__forca)
+        print(f"{self.nome} ataca causando {self.__forca} de dano.")
 
     
 
@@ -93,6 +93,9 @@ class Personagem:
     def mostrar_vida(self):
         return self.__vida
     
+    def falar(self):#função adicionada nesse capitulo
+        print("Eu corro nas sombras da destruição para que ninguém precise abandonar a luz.")
+    
 
 class Jogador():
     def __init__(self, nome, energia, pontos):
@@ -130,33 +133,182 @@ class Menu:
     
     def sair(self):
         print("O Jogo foi Fechado")
+
+
+#classes criadas nesse capitulo
+
+class Arma(): 
+    def __init__(self, nome, dano):
+        self.nome = nome
+        self.dano = dano
+
+class Missao(): 
+    def __init__(self, nome, descricao):
+        self.nome = nome
+        self.descricao = descricao
+
+    def descrever_missao(self):
+        print(self.descricao)
     
+class Item():
+    def __init__(self, nome):
+        self.nome = nome
+
+class Fase:
+    def __init__(self, nome):
+        self.nome = nome
+
+class Aliado:
+    def __init__(self, nome, vida):
+        self.nome = nome
+        self.vida = vida
+        self.defesa = 50
+
 #classe hedeiras
 
-class NPC(Personagem):
+class NPC(Jogador):
     def __init__(self, vida, nome, defesa):
         super().__init__(vida, nome, defesa)
+    
+    def atacar(self):
+        print(f"O NPC não pode atacar")
+
+    def falar(self):
+        print("Saudações, viajante.")
+
 
 class Chefe(Inimigo):
     def __init__(self, nome, vida, forca):
         super().__init__(nome, vida * 2, forca * 2)
 
-class JogadorPremium(Jogador):
-    def __init__(self, nome, energia, pontos):
-        super().__init__(nome, energia, pontos)
+    def atacar(self):
+        dano = self.__forca + (self.__forca * 0.5)
+        print(f"{self.nome} usa um golpe especial causando {dano} de dano total!")
 
 
+class JogadorPremium(Pontuacao):
+    def __init__(self):
+        super().__init__()
+
+    @pontos.setter
+    def pontos(self,valor):
+        if valor >= 0:
+            self.__pontos+=valor*2
+            print(self.pontos())
+        else:
+            print("Valor invalido")
 
 
-#chamados de metodos de classes
-game = Jogo()
+class JogoMultiplayer(Jogo):
+    def __init__(self):
+        super().__init__()
+        self.jogadores= []
 
-pontos = Pontuacao()
+    def adicionar_jogadores(self, jogador):#Função que adiciona o jogadores no jogo
+        self.jogadores.append(jogador)
 
-menu = Menu()
 
-player = Jogador()
+class MenuAvancado(Menu):
+    def __init__(self, titulo):
+        super().__init__(titulo)
+        self.configuracoes = {} 
 
-mob = Personagem()
+    def personalisar(self, chave, valor):
+        self.configuracoes[chave] = valor
+        print(f"Configuração '{chave}' salva como: {valor}")
 
-bixo = Inimigo()
+
+class Arco(Arma):
+    def __init__(self, dano, nome="Arco"):
+        super().__init__(nome, dano)
+
+    def ataque(self):
+        print(f"O Disparo com o {self.nome} causou {self.dano} ao alvo")
+
+
+class Espada(Arma):
+    def __init__(self, dano, nome="Espada"):
+        super().__init__(nome, dano)
+
+    def ataque(self):
+        print(f"O Golpe com a {self.nome} causou {self.dano} ao alvo")
+
+
+class MissaoPrincipal(Missao):
+    def __init__(self, nome, descricao):
+        super().__init__(nome, descricao)
+
+    def concluir_missao(self):
+        print(f"A Missão {self.nome} foi concluida\nSua recompensa: $1000 + 1000xp")
+
+
+class MissaoSecundaria(Missao):
+    def __init__(self, nome, descricao):
+        super().__init__(nome, descricao)
+
+    def concluir_missao(self):
+        print(f"A Missão {self.nome} foi concluida\nSua recompensa: $400 + 100xp")
+
+class Pocao(Item):
+    def __init__(self, nome, efeito):
+        super().__init__(nome)
+        self.efeito = efeito
+    
+    def usar_pocao(self):
+        print(f"A {self.nome} foi usanda e lhe deu {self.efeito}")
+
+class Equipamento(Item):
+    def __init__(self, nome, tipo, bonus):
+        super().__init__(nome)
+        self.tipo = tipo
+        self.bonus = bonus
+        self.equipado = False
+
+    def equipar(self):
+        if not self.equipado:
+            print(f"Você equipa seu {self.nome} no espaço de {self.tipo} e ganha {self.bonus}")
+            self.equipado = True
+        else:
+            print(f"Ja esta equipado")
+
+    def desequipar(self):
+        if self.equipado:
+            print(f"Você desequipa seu {self.nome} e perde o bonus de {self.bonus}")
+            self.equipado = False
+        else:
+            print(f"Não esta equipado")
+
+
+class FaseFloresta(Fase):
+    def __init__(self,nome):
+        super().__init__(nome)
+
+    def ambientacao(self):
+        print(f"A densa floresta de {self.nome} se ergue à sua frente. Sons de folhas e animais ecoam por todo lado, mantendo você em alerta constante.")
+    
+
+class FaseDeserto(Fase):
+    def __init__(self,nome):
+        super().__init__(nome)
+
+    def ambientacao(self):
+        print(f"O calor escaldante do deserto {self.nome} torna cada passo mais pesado. O suor escorre, testando sua determinação a cada instante.")
+
+
+class Guerreiro(Aliado):
+    def __init__(self, nome, vida):
+        super().__init__(nome, vida)
+        self.defesa=100
+    
+    def usar_habilidade(self):
+        print(f"O golpe poderoso de {self.nome} faz o chão tremer, abrindo fissuras e derrubando tudo ao redor.")
+
+
+class Mago(Aliado):
+    def __init__(self, nome, vida):
+        super().__init__(nome, vida)
+        self.defesa=25
+
+    def usar_habilidade(self):
+        print(f"{self.nome} traça runas no ar e canaliza uma explosão de energia arcana que consome tudo no caminho.")
+
