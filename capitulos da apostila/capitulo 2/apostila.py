@@ -157,12 +157,35 @@ class Item():
 class Fase:
     def __init__(self, nome):
         self.nome = nome
+        self.monstros = ["Goblin", "Lobo Selvagem", "Esqueleto Errante", "Morcego Sombrio"]
+
+    def gerar_inimigos(self):
+        monstro = random.choice(self.monstros)
+        print(f"Um {monstro} aparece na fase {self.nome}!")
+
 
 class Aliado:
     def __init__(self, nome, vida):
         self.nome = nome
         self.vida = vida
         self.defesa = 50
+
+class Voador:
+    def __init__(self):
+        pass
+
+    def voar(self):
+        print(f"{self.nome} alça voo pelos céus com majestade!")
+
+
+class Curador:
+    def __init__(self):
+        pass
+
+    def curar(self, aliado, quantidade):
+        aliado.vida += quantidade
+        print(f"{self.nome} cura {aliado.nome} em {quantidade} pontos de vida! Agora {aliado.nome} tem {aliado.vida} de vida.")
+
 
 #classe hedeiras
 
@@ -187,10 +210,9 @@ class Chefe(Inimigo):
 
 
 class JogadorPremium(Pontuacao):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, pontos):
+        super().__init__(pontos)
 
-    @pontos.setter
     def pontos(self,valor):
         if valor >= 0:
             self.__pontos+=valor*2
@@ -207,6 +229,12 @@ class JogoMultiplayer(Jogo):
     def adicionar_jogadores(self, jogador):#Função que adiciona o jogadores no jogo
         self.jogadores.append(jogador)
 
+    def iniciar(self):
+        if not self.jogadores:
+            print("Não é possível iniciar o jogo multiplayer: nenhum jogador conectado.")
+        else:
+            print(f"O jogo multiplayer vai começou com: {len(self.jogadores)} jogador/es")
+
 
 class MenuAvancado(Menu):
     def __init__(self, titulo):
@@ -216,6 +244,10 @@ class MenuAvancado(Menu):
     def personalisar(self, chave, valor):
         self.configuracoes[chave] = valor
         print(f"Configuração '{chave}' salva como: {valor}")
+
+    def mostrar_opcoes(self):
+        super().mostrar_opcoes()
+        print("\nOpções Avançadas:\n4: Multiplayer\n5: Sobrevivência")
 
 
 class Arco(Arma):
@@ -282,17 +314,28 @@ class Equipamento(Item):
 class FaseFloresta(Fase):
     def __init__(self,nome):
         super().__init__(nome)
-
+        self.monstros = ["Ent Sombrio","Aranha Venenosa","Fera da Névoa","Espírito da Floresta"]
+    
     def ambientacao(self):
         print(f"A densa floresta de {self.nome} se ergue à sua frente. Sons de folhas e animais ecoam por todo lado, mantendo você em alerta constante.")
     
+    def gerar_inimigos(self):
+        monstro = random.choice(self.monstros)  
+        print(f"Da escuridão de {self.nome}, surge um(a) {monstro} entre as árvores!")
+
 
 class FaseDeserto(Fase):
     def __init__(self,nome):
         super().__init__(nome)
+        self.monstros_deserto = ["Escorpião Gigante","Múmia","Verme da Areia","Elemental de Areia"]
 
     def ambientacao(self):
         print(f"O calor escaldante do deserto {self.nome} torna cada passo mais pesado. O suor escorre, testando sua determinação a cada instante.")
+    
+    def gerar_inimigos(self):
+        monstro = random.choice(self.monstros)
+        print(f"No deserto {self.nome}, surge um {monstro} das dunas!")
+
 
 
 class Guerreiro(Aliado):
@@ -312,3 +355,14 @@ class Mago(Aliado):
     def usar_habilidade(self):
         print(f"{self.nome} traça runas no ar e canaliza uma explosão de energia arcana que consome tudo no caminho.")
 
+class Dragao(Inimigo, Voador):
+    def __init__(self, nome, vida, forca, elemento):
+        super().__init__(nome, vida, forca)
+        self.elemento = elemento
+
+class Paladino(Guerreiro, Curador):
+    def __init__(self, nome, vida):
+        super().__init__(nome, vida)
+
+    def usar_habilidade(self):
+        print(f"{self.nome} ergue sua espada sagrada, causando dano e protegendo seus aliados com luz divina!")
